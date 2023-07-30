@@ -11,3 +11,7 @@ cd ${TARGET}/metaf2xml-code
 git checkout r2.8
 git checkout unstable
 METAF2XML=${HERE}/metaf2xml ./install.pl all
+
+cd METAF2XML=${HERE}/metaf2xml
+./metaf.pl --help     2> ${TARGET}/metaf.help
+./metaf2xml.pl --help 2> ${TARGET}/metaf2xml.help
