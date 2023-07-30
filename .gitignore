@@ -29,3 +29,6 @@ replay_pid*
 # Backup files
 *.bak
 *~
+
+# metaf2xml installation...
+metaf2xml
