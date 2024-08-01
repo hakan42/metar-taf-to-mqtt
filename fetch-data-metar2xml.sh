@@ -66,6 +66,14 @@ do
     xmllint --xpath '//info/text()' ${TARGET}/${s}-info.xml \
 	> ${TARGET}/${s}-name.txt
     
+    xmllint \
+	--xpath '(//metar)[1]' ${TARGET}/${s}-FULL.xml \
+	> ${TARGET}/${s}-metar.xml
+
+    xmllint \
+	--xpath '(//taf)[1]' ${TARGET}/${s}-FULL.xml \
+	> ${TARGET}/${s}-taf.xml
+
     #
     # Now publish it via MQTT
     #
