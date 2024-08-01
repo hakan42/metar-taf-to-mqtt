@@ -1,9 +1,5 @@
 #!/bin/sh
 
-echo "DEAD"
-
-exit 1
-
 STATIONS=""
 
 STATIONS="${STATIONS} EDDM" # Munich
@@ -58,13 +54,14 @@ mkdir -p ${TARGET}
 for s in ${STATIONS}
 do
     curl \
-	--silent \
-	--output ${TARGET}/${s}-FULL.xml \
-	"https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=5&mostRecentForEachStation=true&stationString="${s}
+        --silent \
+        --output ${TARGET}/${s}-FULL.xml \
+        -H 'accept: */*' \
+        "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&hoursBeforeNow=1&format=xml&mostRecent=true&stationString="${s} \
 
     xmllint \
-	--xpath '//flight_category/text()' ${TARGET}/${s}-FULL.xml \
-	> ${TARGET}/${s}-category
+        --xpath '//flight_category/text()' ${TARGET}/${s}-FULL.xml \
+        > ${TARGET}/${s}-category
 
     echo ${s}
     cat ${TARGET}/${s}-category
@@ -74,9 +71,9 @@ do
     #
 
     mosquitto_pub \
-	--retain \
-	--topic metarmap/${s}/flight_category \
-	--file ${TARGET}/${s}-category
+        --retain \
+        --topic metarmap/${s}/flight_category \
+        --file ${TARGET}/${s}-category
 
 done
 
