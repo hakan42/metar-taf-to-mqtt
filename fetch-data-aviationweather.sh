@@ -1,5 +1,9 @@
 #!/bin/sh
 
+echo "DEAD"
+
+exit 1
+
 STATIONS=""
 
 STATIONS="${STATIONS} EDDM" # Munich
@@ -44,16 +48,18 @@ STATIONS="${STATIONS} "
 STATIONS="${STATIONS} "
 STATIONS="${STATIONS} "
 
-TARGET=./target/aviationweather
+HERE=$(dirname $(realpath $0))
 
-rm -rf ./${TARGET}
-mkdir -p ./${TARGET}
+TARGET=${HERE}/target/aviationweather
+
+rm -rf ${TARGET}
+mkdir -p ${TARGET}
 
 for s in ${STATIONS}
 do
     curl \
 	--silent \
-	--output ./${TARGET}/${s}-FULL.xml \
+	--output ${TARGET}/${s}-FULL.xml \
 	"https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=5&mostRecentForEachStation=true&stationString="${s}
 
     xmllint \
