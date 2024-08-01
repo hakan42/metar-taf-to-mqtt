@@ -13,7 +13,7 @@ mkdir -p ${TARGET}
 
 for s in ${STATIONS}
 do
-    RAW=${TARGET}/${s}-aw-FULL.xml
+    RAW=${TARGET}/${s}-aw-FULL-metar.xml
 
     curl \
         --silent \
@@ -24,6 +24,14 @@ do
     xmllint \
         --xpath '//flight_category/text()' ${RAW} \
         > ${TARGET}/${s}-category
+
+    RAW=${TARGET}/${s}-aw-FULL-taf.xml
+
+    curl \
+        --silent \
+        --output ${RAW} \
+        -H 'accept: */*' \
+        "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=tafs&hoursBeforeNow=1&format=xml&mostRecent=true&stationString="${s} \
 
     #
     # Now publish it via MQTT
