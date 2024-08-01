@@ -13,24 +13,26 @@ mkdir -p ${TARGET}
 
 for s in ${STATIONS}
 do
+    RAW=${TARGET}/${s}-m2x-FULL.xml
+
     curl \
         --silent \
-        --output ${TARGET}/${s}-FULL.xml \
+        --output ${RAW} \
 	"https://metaf2xml.sourceforge.io/cgi-bin/metaf.pl?lang=en&format=xml&mode=latest&hours=24&unit_temp=C&type_metaf=icao&msg_metaf="${s}"&type_synop=synop&msg_synop=&type_buoy=buoy&msg_buoy=&type_amdar=amdar&msg_amdar="
 
     xmllint \
-	--xpath '(//info)[1]' ${TARGET}/${s}-FULL.xml \
+	--xpath '(//info)[1]' ${RAW} \
 	> ${TARGET}/${s}-info.xml
 
     xmllint --xpath '//info/text()' ${TARGET}/${s}-info.xml \
 	> ${TARGET}/${s}-name.txt
     
     xmllint \
-	--xpath '(//metar)[1]' ${TARGET}/${s}-FULL.xml \
+	--xpath '(//metar)[1]' ${RAW} \
 	> ${TARGET}/${s}-metar.xml
 
     xmllint \
-	--xpath '(//taf)[1]' ${TARGET}/${s}-FULL.xml \
+	--xpath '(//taf)[1]' ${RAW} \
 	> ${TARGET}/${s}-taf.xml
 
     #
@@ -45,13 +47,3 @@ do
 	--file ${TARGET}/${s}-name.txt
 
 done
-
-# ls -l ${TARGET}
-
-ARCHIVE=${HERE}/archive/$(date -u +%Y%m%d)/$(date -u +%Y%m%d-%H%M)
-
-mkdir -p ${ARCHIVE}
-rsync -avr ${TARGET}/ ${ARCHIVE}/
-
-find ${ARCHIVE} -type f -a -mtime +7  | xargs --no-run-if-empty rm
-find ${ARCHIVE} -type d -a -empty     | xargs --no-run-if-empty rmdir
