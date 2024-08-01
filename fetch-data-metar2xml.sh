@@ -79,4 +79,12 @@ do
 
 done
 
-ls -l ${TARGET}
+# ls -l ${TARGET}
+
+ARCHIVE=${HERE}/archive/$(date -u +%Y%m%d-%H%M)
+
+mkdir -p ${ARCHIVE}
+rsync -avr ${TARGET}/ ${ARCHIVE}/
+
+find ${ARCHIVE} -mtime +7 | xargs --no-run-if-empty rm
+find ${ARCHIVE} -empty    | xargs --no-run-if-empty rmdir
