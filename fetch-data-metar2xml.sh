@@ -44,16 +44,19 @@ STATIONS="${STATIONS} "
 STATIONS="${STATIONS} "
 STATIONS="${STATIONS} "
 
-TARGET=./target/metar2xml
 
-rm -rf ./${TARGET}
-mkdir -p ./${TARGET}
+HERE=$(dirname $(realpath $0))
+
+TARGET=${HERE}/target/metar2xml
+
+rm -rf ${TARGET}
+mkdir -p ${TARGET}
 
 for s in ${STATIONS}
 do
     curl \
         --silent \
-        --output ./${TARGET}/${s}-FULL.xml \
+        --output ${TARGET}/${s}-FULL.xml \
 	"https://metaf2xml.sourceforge.io/cgi-bin/metaf.pl?lang=en&format=xml&mode=latest&hours=24&unit_temp=C&type_metaf=icao&msg_metaf="${s}"&type_synop=synop&msg_synop=&type_buoy=buoy&msg_buoy=&type_amdar=amdar&msg_amdar="
 
     xmllint \
