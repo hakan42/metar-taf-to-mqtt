@@ -13,7 +13,8 @@ mkdir -p ${TARGET}
 
 for s in ${STATIONS}
 do
-    RAW=${TARGET}/${s}-m2x-FULL.xml
+    mkdir -p ${TARGET}/${s}
+    RAW=${TARGET}/${s}/${s}-m2x-FULL.xml
 
     curl \
         --silent \
@@ -22,28 +23,19 @@ do
 
     xmllint \
 	--xpath '(//info)[1]' ${RAW} \
-	> ${TARGET}/${s}-info.xml
+	> ${TARGET}/${s}/${s}-info.xml
 
-    xmllint --xpath '//info/text()' ${TARGET}/${s}-info.xml \
-	> ${TARGET}/${s}-name.txt
+    xmllint --xpath '//info/text()' ${TARGET}/${s}/${s}-info.xml \
+	> ${TARGET}/${s}/${s}-name.txt
     
-    xmllint \
-	--xpath '(//metar)[1]' ${RAW} \
-	> ${TARGET}/${s}-metar.xml
-
-    xmllint \
-	--xpath '(//taf)[1]' ${RAW} \
-	> ${TARGET}/${s}-taf.xml
-
     #
     # Now publish it via MQTT
     #
     # TODO would be nice to a check and publish-if-not-changed
     #
-
     mosquitto_pub \
      	--retain \
 	--topic metarmap/${s}/name \
-	--file ${TARGET}/${s}-name.txt
+	--file ${TARGET}/${s}/${s}-name.txt
 
 done
