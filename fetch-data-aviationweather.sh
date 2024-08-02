@@ -26,6 +26,10 @@ do
         --xpath '//flight_category/text()' ${RAW} \
         > ${TARGET}/${s}/${s}-category
 
+    xmllint \
+        --xpath '//METAR/raw_text/text()' ${RAW} \
+        > ${TARGET}/${s}/${s}-metar.xml
+
     RAW=${TARGET}/${s}/${s}-aw-FULL-taf.xml
 
     curl \
@@ -33,6 +37,10 @@ do
         --output ${RAW} \
         -H 'accept: */*' \
         "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=tafs&hoursBeforeNow=1&format=xml&mostRecent=true&stationString="${s}
+
+    xmllint \
+        --xpath '//TAF/raw_text/text()' ${RAW} \
+        > ${TARGET}/${s}/${s}-taf.xml
 
     #
     # Now publish it via MQTT
