@@ -3,6 +3,7 @@ STATIONS="${STATIONS} EDDN" # Nuremberg
 STATIONS="${STATIONS} EDJA" # Memmingen
 STATIONS="${STATIONS} EDMA" # Augsburg
 STATIONS="${STATIONS} EDMO" # Oberpfaffenhofen
+STATIONS="${STATIONS} EDTY" # Adolf Würth Airport
 
 STATIONS="${STATIONS} ETEB" # Ansbach
 STATIONS="${STATIONS} ETHA" # Altenstadt
